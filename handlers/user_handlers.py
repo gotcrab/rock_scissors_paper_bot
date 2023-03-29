@@ -3,7 +3,7 @@ from aiogram.filters import Command, CommandStart, Text
 from aiogram.types import Message
 from keyboards.keyboards import game_kb, yes_no_kb
 from lexicon.lexicon import LEXICON_RU
-from services.services import get_bot_choice, get_winner
+from services.services import get_bot_choice, get_winner, wins
 
 router: Router = Router()
 
@@ -17,7 +17,7 @@ async def start_com(message: Message):
 
 
 # Этот хэндлер срабатывает на команду /help
-@router.message(Command(commands=['/help']))
+@router.message(Command(commands=['help']))
 async def help_com(message: Message):
     await message.answer(text=LEXICON_RU['/help'],
                          reply_markup=yes_no_kb)
@@ -47,6 +47,7 @@ async def game_buttons(message: Message):
     await message.answer(text=f'{LEXICON_RU["bot_choice"]} '
                          f'- {LEXICON_RU[bot_choice]}')
     winner = get_winner(message.text, bot_choice)
+    await message.answer(wins())
     await message.answer(text=LEXICON_RU[winner],
                          reply_markup=yes_no_kb)
 
